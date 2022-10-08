@@ -26,15 +26,32 @@ const deleteUser = asyncHandler(async (req, res, next) => {
   }
 });
 
-const getUser = asyncHandler();
+const getUser = asyncHandler(async (req, res, next) => {
+  const user = await UserModel.findById(req.params.id);
+  res.status(200).json(user);
+});
 
-const subscribe = asyncHandler();
+const subscribe = asyncHandler(async (req, res, next) => {
+  await UserModel.findById(req.user.id, {
+    $push: { subscribeUsers: req.params.id },
+  });
+  await UserModel.findByIdAndUpdate(req.params.id, { $inc: { subscribe: 1 } });
 
-const unsubscribe = asyncHandler();
+  res.status(200).json("Subscribe Successfull");
+});
 
-const like = asyncHandler();
+const unsubscribe = asyncHandler(async (req, res, next) => {
+  await UserModel.findById(req.user.id, {
+    $pull: { subscribeUsers: req.params.id },
+  });
+  await UserModel.findByIdAndUpdate(req.params.id, { $inc: { subscribe: -1 } });
 
-const dislike = asyncHandler();
+  res.status(200).json("Unsubscribe Successfull");
+});
+
+const like = asyncHandler(async (req, res, next) => {});
+
+const dislike = asyncHandler(async (req, res, next) => {});
 
 module.exports = {
   update,
