@@ -1,16 +1,20 @@
-var express = require("express");
-var app = express();
+const express = require("express");
+const app = express();
+const cookieParser = require("cookie-parser");
 require("dotenv").config();
+// require("jsonwebtoken");
 
 // Database
 require("./db/db");
 
 // middleware
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //APIS
 app.use("/api/auth/", require("./routes/auth"));
+app.use("/api/users", require("./routes/userRoutes"));
 
 //error handler
 app.use(require("./middleware/errorHandler"));
