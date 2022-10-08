@@ -1,10 +1,16 @@
 var express = require("express");
 var app = express();
 require("dotenv").config();
+
+// Database
 require("./db/db");
-app.get("/", (req, res) => {
-  res.send("Hello World, Hi there");
-});
+
+// middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+//APIS
+app.use("/api/auth/", require("./routes/auth"));
 
 //error handler
 app.use(require("./middleware/errorHandler"));
