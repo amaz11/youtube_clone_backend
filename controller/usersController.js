@@ -13,7 +13,7 @@ const update = asyncHandler(async (req, res, next) => {
     );
     res.status(200).json(updatedUser);
   } else {
-    return next(errorResponse("You can update only your account!", 403));
+    return next(new errorResponse("You can update only your account!", 403));
   }
 });
 
@@ -22,7 +22,7 @@ const deleteUser = asyncHandler(async (req, res, next) => {
     await UserModel.findByIdAndDelete(req.params.id);
     res.status(200).json("User Delete Sussecsfully");
   } else {
-    return next(errorResponse("You can delete only your account!", 403));
+    return next(new errorResponse("You can delete only your account!", 403));
   }
 });
 

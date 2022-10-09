@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+const { Schema, model } = require("mongoose");
 
-const VideoSchema = new mongoose.Schema(
+const VideoSchema = new Schema(
   {
     userId: {
       type: String,
@@ -42,4 +42,4 @@ const VideoSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Video", VideoSchema);
+module.exports = model("Video", VideoSchema);

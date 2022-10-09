@@ -15,6 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 //APIS
 app.use("/api/auth/", require("./routes/auth"));
 app.use("/api/users", require("./routes/userRoutes"));
+app.use("/api/videos", require("./routes/videoRoutes"));
 
 //error handler
 app.use(require("./middleware/errorHandler"));

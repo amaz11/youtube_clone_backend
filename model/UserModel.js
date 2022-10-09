@@ -18,10 +18,12 @@ const UserSchema = new Schema(
     img: {
       type: String,
     },
+    // people who subscribe to me
     subscribers: {
       type: Number,
       default: 0,
     },
+    // whom I subscribe to user
     subscribedUsers: {
       type: [String],
     },
