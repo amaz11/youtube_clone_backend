@@ -52,14 +52,26 @@ const addView = asyncHandler(async (req, res, next) => {
   res.status(200).json("The view has been increased.");
 });
 
-const getByTag = asyncHandler(async (req, res, next) => {});
+const getByTag = asyncHandler(async (req, res, next) => {
+  const tags = req.quary.tags;
+
+  const videos = await videoModel.find({ tags: { $in: tags } }).limit(20);
+  res.status(200).json(videos);
+});
 
 const random = asyncHandler(async (req, res, next) => {
   const videos = await videoModel.aggregate([{ $sample: { size: 40 } }]);
   res.status(200).json(videos);
 });
 
-const search = asyncHandler(async (req, res, next) => {});
+const search = asyncHandler(async (req, res, next) => {
+  const quary = req.quary.q;
+
+  const videos = await videoModel
+    .find({ title: { $regex: quary, $options: "i" } })
+    .limit(20);
+  res.status(200).json(videos);
+});
 
 const sub = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id);
