@@ -1,4 +1,5 @@
 const asyncHandler = require("../middleware/asyncHandler");
+const UserModel = require("../model/UserModel");
 const { default: videoModel } = require("../model/videoModel");
 const errorResponse = require("../utils/errorResponse");
 
@@ -59,6 +60,7 @@ const getByTag = asyncHandler(async (req, res, next) => {
   res.status(200).json(videos);
 });
 
+// get rendom video
 const random = asyncHandler(async (req, res, next) => {
   const videos = await videoModel.aggregate([{ $sample: { size: 40 } }]);
   res.status(200).json(videos);
@@ -73,8 +75,9 @@ const search = asyncHandler(async (req, res, next) => {
   res.status(200).json(videos);
 });
 
+// get video of subscribed channels
 const sub = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user.id);
+  const user = await UserModel.findById(req.user.id);
   const subscribedChannels = user.subscribedUsers;
 
   const list = Promise.all(
@@ -84,6 +87,7 @@ const sub = asyncHandler(async (req, res, next) => {
   );
 });
 
+//trend video
 const trend = asyncHandler(async (req, res, next) => {
   const videos = await videoModel.find().sort({ views: -1 });
   res.status(200).json(videos);
