@@ -1,5 +1,6 @@
 const asyncHandler = require("../middleware/asyncHandler");
 const UserModel = require("../model/UserModel");
+const videoModel = require("../model/videoModel");
 const errorResponse = require("../utils/errorResponse");
 
 const update = asyncHandler(async (req, res, next) => {
@@ -49,9 +50,33 @@ const unsubscribe = asyncHandler(async (req, res, next) => {
   res.status(200).json("Unsubscribe Successfull");
 });
 
-const like = asyncHandler(async (req, res, next) => {});
+const like = asyncHandler(async (req, res, next) => {
+  const id = req.user.id;
+  const videoId = req.params.videoID;
+  await videoModel.findByIdAndUpdate(
+    videoId,
+    {
+      $addToSet: { likes: id },
+      $pull: { dislikes: id },
+    },
+    { new: true }
+  );
+  res.status(204).json("Video has been liked");
+});
 
-const dislike = asyncHandler(async (req, res, next) => {});
+const dislike = asyncHandler(async (req, res, next) => {
+  const id = req.user.id;
+  const videoId = req.params.videoID;
+  await videoModel.findByIdAndUpdate(
+    videoId,
+    {
+      $addToSet: { dislikes: id },
+      $pull: { likes: id },
+    },
+    { new: true }
+  );
+  res.status(204).json("Video has been disliked");
+});
 
 module.exports = {
   update,
